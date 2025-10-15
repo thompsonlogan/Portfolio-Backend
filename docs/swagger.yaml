@@ -1,0 +1,159 @@
+definitions:
+  handlers.AddVisitRequest:
+    properties:
+      source:
+        description: Source of the visit (required)
+        type: string
+    required:
+    - source
+    type: object
+  handlers.AddVisitResponse:
+    properties:
+      message:
+        description: Success message
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /visit:
+    post:
+      consumes:
+      - application/json
+      description: Adds a visit record for the given source. Automatically records
+        IP, user-agent, and referrer.
+      parameters:
+      - description: Visit data
+        in: body
+        name: visit
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AddVisitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AddVisitResponse'
+        "400":
+          description: 'error: bad request'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: 'error: internal server error'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Record a portfolio visit
+      tags:
+      - Analytics
+  /visit/github:
+    post:
+      consumes:
+      - application/json
+      description: Adds a visit record for the given src and IP. If the record exists,
+        increments github visit count.
+      parameters:
+      - description: Visit data
+        in: body
+        name: visit
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AddVisitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AddVisitResponse'
+        "400":
+          description: 'error: bad request'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: 'error: internal server error'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Record a github visit
+      tags:
+      - Analytics
+  /visit/linkedin:
+    post:
+      consumes:
+      - application/json
+      description: Adds a visit record for the given src and IP. If the record exists,
+        increments Linkedin visit count.
+      parameters:
+      - description: Visit data
+        in: body
+        name: visit
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AddVisitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AddVisitResponse'
+        "400":
+          description: 'error: bad request'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: 'error: internal server error'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Record a Linkedin visit
+      tags:
+      - Analytics
+  /visit/resume:
+    post:
+      consumes:
+      - application/json
+      description: Adds a visit record for the given src and IP. If the record exists,
+        increments resume download count.
+      parameters:
+      - description: Visit data
+        in: body
+        name: visit
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AddVisitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AddVisitResponse'
+        "400":
+          description: 'error: bad request'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: 'error: internal server error'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Record a resume download
+      tags:
+      - Analytics
+swagger: "2.0"

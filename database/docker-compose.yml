@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: Portfolio-DB
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: Portfolio
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d Portfolio"]
+      interval: 5s
+      retries: 5
+
+  flyway:
+    image: flyway/flyway:latest
+    container_name: portfolio_flyway
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./flyway/sql_versioned:/flyway/sql_versioned
+      - ./flyway/sql_repeatable:/flyway/sql_repeatable
+    command: >
+      -cleanDisabled=false
+      -url=jdbc:postgresql://postgres:5432/Portfolio
+      -user=user
+      -password=password
+      -locations=filesystem:/flyway/sql_versioned,filesystem:/flyway/sql_repeatable
+      clean migrate
+    restart: "no"
+
+volumes:
+  pgdata:
