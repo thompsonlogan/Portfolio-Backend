@@ -8,14 +8,16 @@ import (
 	"api/repository"
 	"api/services"
 	"log"
-	"os/exec"
+
+	//"os/exec"
 
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+
+	//swaggerFiles "github.com/swaggo/files"
+	//ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -25,13 +27,13 @@ func main() {
 	cfg.Log()
 
 	// Swagger docs only in dev
-	if cfg.IsDev() {
+	/*if cfg.IsDev() {
 		log.Println("Regenerating Swagger docs (development mode)...")
 		cmd := exec.Command("swag", "init", "--generalInfo", "handlers/analytics_handler.go", "--output", "docs")
 		if err := cmd.Run(); err != nil {
 			log.Fatalf("failed to generate Swagger docs: %v", err)
 		}
-	}
+	}*/
 
 	// Database connection
 	db, err := gorm.Open(postgres.Open(cfg.PostgresDSN()), &gorm.Config{})
@@ -63,9 +65,9 @@ func main() {
 	r.POST("/visit/linkedin", analyticsHandler.AddLinkedinVisit)
 	r.POST("/visit/resume", analyticsHandler.AddResumeDownload)
 	r.GET("/health", func(c *gin.Context) { c.String(200, "ok") })
-	if cfg.IsDev() {
+	/*if cfg.IsDev() {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
+	}*/
 
 	// Async analytics worker
 	go handlers.StartAnalyticsQueueWorker()
