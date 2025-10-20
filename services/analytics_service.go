@@ -42,7 +42,6 @@ func (s *analyticsService)AddVisit(visit *model.PortfolioVisit) error {
     return err
   }
 
-  existingVisit.VisitCount++
   return s.repo.UpdateVisit(existingVisit)
 }
 
@@ -52,6 +51,7 @@ func (s *analyticsService)AddGithubVisit(visit *model.PortfolioVisit) error {
     if err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       visit.VisitCount = 1
+      visit.GithubVisitCount = 1
       return s.repo.AddVisit(visit)
     }
     return err
@@ -67,6 +67,7 @@ func (s *analyticsService)AddLinkedinVisit(visit *model.PortfolioVisit) error {
     if err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       visit.VisitCount = 1
+      visit.LinkedinVisitCount = 1
       return s.repo.AddVisit(visit)
     }
     return err
@@ -82,6 +83,7 @@ func (s *analyticsService)AddResumeDownload(visit *model.PortfolioVisit) error {
     if err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       visit.VisitCount = 1
+      visit.ResumeDownloadCount = 1
       return s.repo.AddVisit(visit)
     }
     return err
