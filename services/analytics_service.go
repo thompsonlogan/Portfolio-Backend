@@ -42,6 +42,7 @@ func (s *analyticsService)AddVisit(visit *model.PortfolioVisit) error {
     return err
   }
 
+  existingVisit.VisitCount++
   return s.repo.UpdateVisit(existingVisit)
 }
 
